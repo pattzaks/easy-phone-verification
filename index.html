@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+        <link rel="shortcut icon" href="http://lorempixel.com/g/400/200">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+	<meta charset="utf-8">
+       	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+       	<meta name="description" content="Auth0: Lets do something better with Webtasks">
+       	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 	<title>For Auth0: Akshay's Webtask Sample</title>
+</head>
+<body>
+<style>
+.mdl-layout__content {
+	padding-top:100px ;
+    }
+</style>
+<div class="mdl-layout mdl-js-layout">
+<main class="mdl-layout__content">
+    <div class="page-content">
+	<div class="mdl-grid">
+		<div class="mdl-cell mdl-cell--4-col mdl-cell--1-tablet mdl-cell--1-phone"></div>
+		<div class="mdl-cell mdl-cell--4-col mdl-cell--6-tablet mdl-cell--2-phone">
+			<div class="mdl-card mdl-shadow--6dp mdl-tabs mdl-js-tabs mdl-js-ripple-effect mdl-typography--text-center" style="display:block;align:center;width:100%;">
+				<div class="mdl-card__title mdl-color--primary mdl-color-text--white">
+					<h3 class="mdl-card__title-text center">Dashboard of an Amazing Service</h3>
+				</div>
+				<div class="mdl-tabs__tab-bar">
+        			<a href="#login" class="mdl-tabs__tab is-active">Auto-login link</a>
+  				</div>
+	  			<div class="mdl-card__supporting-text mdl-tabs__panel is-active" id="login">
+						<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+							<input class="mdl-textfield__input" type="tel" placeholder="Mobile no. with country code" maxlength="15" id="phone" name="phone" value="+" required>
+							<label class="mdl-textfield__label" for="phone">Enter your Mobile no.</label>
+						</div>
+
+						<div class="mdl-card__actions mdl-card--border">
+							<center><button type="btn-primary" id="btn-sub" class="mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect">Request Access</button></center>
+						</div>
+				</div>
+			</div>
+		<div class="mdl-cell mdl-cell--4-col mdl-cell--1-tablet mdl-cell--1-phone"></div>
+		</div>
+</div>
+</div>
+</main>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+
+    try{
+        var url      = window.location.href;
+        var phone    = url.split("phone=")[1].split("&")[0];
+        var otp      = url.split("otp=")[1];
+        var postData = {"phone" : phone, "otp":otp, method:"verify"};
+
+        $.post ("https://wt-5672f44eeb7bd7615e3a301ff4c8321b-0.run.webtask.io/autologin-webtask",
+                postData,
+                function(data) {
+        		console.log(data);
+        		console.log(data.state);
+	            if ('ok' == data.state) {
+                      $("#btn-sub").hide();
+                      window.location.href= data.message;
+                    }else {
+                        alert (data);
+                    }
+                }
+	    );
+    }catch(e) {alert ("A Auto-Login system for easy sign up on phone");}
+
+
+    $('#btn-sub').click(function(){
+	if ("" == $('#phone').val()) {
+		alert ("Please enter a phone number");
+	}else {
+        var postData={"phone":$('#phone').val(), method: "initlogin"};
+        $.post ("https://wt-5672f44eeb7bd7615e3a301ff4c8321b-0.run.webtask.io/autologin-webtask",
+                postData,
+                function(data) {
+        		console.log(data);
+        		console.log(data.state);
+                $("#btn-sub").hide();
+	            if ('init' == data.state) {
+                        alert (data.message);// new user gets a auto-login link on SMS
+                }else if ('pending' == data.state) {
+                        alert (data.message);// Missed the verification
+                }
+                else if ('ok' == data.state){
+                        window.location.href= data.message;
+                    }
+                }
+	    );
+        return;
+    }
+
+
+});
+});
+</script>
+</body>
+</html>
