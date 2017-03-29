@@ -34,12 +34,12 @@ I am just a beginer at node.js & Webtask.
 
 Let me know what you think.   
 Reviews & suggestions are welcome.
+Screenshots : 
 
-Login Screen :- 
+ 
 ![Login Screen](https://cloud.githubusercontent.com/assets/693732/24478802/ebdd7038-14f9-11e7-9283-fa41af5d1043.PNG)
 
 
-Profile screen :-
 ![Profile screen](https://cloud.githubusercontent.com/assets/693732/24478652/478bc3ae-14f9-11e7-8e12-effb91357cd8.PNG)
 
 
